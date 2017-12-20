@@ -20,8 +20,6 @@ We will implement ourselves the point matching algorithm using the minutiae feat
 
 We will assess the perfomance of our system in verification mode using the all-against-all strategy in both single and multi template settings
 
-![alt text](2.png)
-
 ## Datasets
 
 We will use 3 different datasets that can be found [here](http://www.advancedsourcecode.com/fingerprintdatabase.asp)
