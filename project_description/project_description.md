@@ -20,10 +20,10 @@ We will implement ourselves the point matching algorithm using the minutiae feat
 
 We will assess the perfomance of our system in verification mode using the all-against-all strategy in both single and multi template settings
 
-## Datasets
+##  Datasets
 
-We will use 3 different datasets that can be found [here](http://www.advancedsourcecode.com/fingerprintdatabase.asp)
+We will use 3 different datasets that can be found [here](http://www.advancedsourcecode.com/fingerprintdatabase.asp).
 
 ## Sources
 
-The following [work](http://biometrics.cse.msu.edu/Publications/Fingerprint/RossJainReisman_HybridFpMatcher_PR03.pdf) will serve as a basis for the minutia extraction algorithm workflow.
+The following [work](http://biometrics.cse.msu.edu/Publications/Fingerprint/RossJainReisman_HybridFpMatcher_PR03.pdf) will serve as a basis for the minutiae extraction algorithm workflow.
