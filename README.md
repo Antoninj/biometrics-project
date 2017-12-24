@@ -4,13 +4,23 @@ The goal is to develop a fingerprint recognition biometric system and carry out 
 
 Eventually and if proven robust enough, the system might be integrated as an alternative ticketing solution into the ROMA ATAC public transportation system.
 
+## Preprocessing 
+
+A few preprocessing steps will be applied to the fingerprint images using the ![skimage](http://scikit-image.org) image processing library.
+More precisely 4 main preprocessing techniques will be applied in order to enhance the quality of the images :
+
+- Normalization:
+- Gabor filtering
+- Binarization
+- Thining 
+
 ## Feature extraction 
 
-The underlying feature extraction technique used for our fingerprint recognition system will be based on minutiae extraction.
+The feature extraction algorithm used for our fingerprint recognition system will be based on the crossing number minutiae extraction technique.
 
 ![alt text](data/1bis.png)
 
-The minutiae extraction algorithm source code will mostly be implemented by engineering together some of the code available on the following [GitHub repository](https://github.com/rtshadow/biometrics).
+The minutiae extraction algorithm source code will likely be implemented by engineering together some of the code available on the following [GitHub repository](https://github.com/rtshadow/biometrics).
 
 ## Matching algorithm 
 
@@ -18,7 +28,7 @@ We will implement ourselves the point matching algorithm using the minutiae feat
 
 ## Performance evaluation
 
-We will assess the perfomance of our system in verification mode using the all-against-all strategy in both single and multi template settings
+We will assess the perfomance of our system in verification mode using the all-against-all strategy in both single and multi template settings.
 
 ##  Datasets
 
