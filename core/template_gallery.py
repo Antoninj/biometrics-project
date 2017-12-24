@@ -25,24 +25,24 @@ def save_images(path, images):
 def preprocess_batch_images(images)
 	return [preprocess.apply_preprocessing(img) for img in images]
 
-def extract_minutiae(images):
+def extract_minutiae_batch(images):
 	return [extract.extract_minutiae(img) for img in preprocessed_images]
 
 def __main__():
 	data_path = "data/PNG"
 	gallery_path = "data/gallery/"
 
-	print("loading images")
+	print("Loading images... \n")
 	images = load_images(data_path)
 
-	print("preprocessing images")
+	print("Preprocessing images...\n")
 	preprocessed_images = preprocess_batch_images(images)
 
-	print("extracting features")
-	extracted_features = extract_minutiae(preprocessed_images)
+	print("Extracting features... \n")
+	extracted_features = extract_minutiae_batch(preprocessed_images)
 
 	save_images(gallery_path, extracted_features)
-	print("Template gallery created")
+	print("Template gallery created !")
 
 if __name__=="__main__":
 	main()

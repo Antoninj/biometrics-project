@@ -46,7 +46,6 @@ def main():
 	base_image_name = os.path.splitext(args.image[0])[0]
 	imsave(base_image_name+"preprocessed.png", img_as_uint(preprocessed_image))
 
-
 if __name__=="__main__":
 	main()
 
