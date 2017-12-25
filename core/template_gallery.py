@@ -32,11 +32,11 @@ def extract_minutiae_batch(images):
 
 def main():
 	parser = argparse.ArgumentParser(description="Create template gallery from fingerprint images")
-	parser.add_argument("-f","--folder", nargs=1, help = "Input folder location" , type=str)
+	parser.add_argument("f","folder", nargs=1, help = "Input folder location" , type=str)
 	args = parser.parse_args()
 
 	data_path = args.folder
-	gallery_path = "data/template_gallery/"
+	gallery_path = "data/template_data/"
 
 	print("Loading images... \n")
 	images = load_images(data_path)
