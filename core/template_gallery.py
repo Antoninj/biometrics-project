@@ -11,7 +11,7 @@ import json
 import regex 
 
 from skimage import img_as_uint
-from skimage.io import imread, imshow, imsave
+from skimage.io import imread, imsave
 
 import argparse
 
@@ -28,9 +28,9 @@ def preprocess_batch_images(images)
 	return [preprocess.apply_preprocessing(img) for img in images]
 
 def extract_minutiae_batch(images):
-	return [extract.extract_minutiae(img) for img in preprocessed_images]
+	return [extract.extract_all_minutiae(img) for img in preprocessed_images]
 
-def __main__():
+def main():
 	parser = argparse.ArgumentParser(description="Create template gallery from fingerprint images")
 	parser.add_argument("-f","--folder", nargs=1, help = "Input folder location" , type=str)
 	args = parser.parse_args()

@@ -2,7 +2,7 @@
 # coding: utf-8
 
 from skimage import img_as_uint
-from skimage.io import imread, imshow, imsave
+from skimage.io import imread, imsave
 from skimage.exposure import equalize_adapthist, rescale_intensity
 from skimage.filters import threshold_local, gaussian 
 from skimage.morphology import thin
@@ -43,8 +43,9 @@ def main():
 	image = imread(args.image[0], as_grey= True)
 	preprocessed_image = apply_preprocessing(image)
 
-	base_image_name = os.path.splitext(args.image[0])[0]
-	imsave(base_image_name+"preprocessed.png", img_as_uint(preprocessed_image))
+	if args.save:
+		base_image_name = os.path.splitext(args.image[0])[0]
+		imsave(base_image_name+"preprocessed.png", img_as_uint(preprocessed_image))
 
 if __name__=="__main__":
 	main()
