@@ -1,6 +1,8 @@
 # Author: Antonin Jousson
 # coding: utf-8
 
+# To do : add gabor filtering step to improve preprocessed image quality
+
 from skimage import img_as_uint
 from skimage.io import imread, imsave
 from skimage.exposure import equalize_adapthist, rescale_intensity
@@ -47,7 +49,7 @@ def main():
 
 	if args.save:
 		base_image_name = os.path.splitext(args.filepath[0])[0]
-		imsave(base_image_name+"preprocessed.png", img_as_uint(preprocessed_image))
+		imsave(base_image_name+"_preprocessed.png", img_as_uint(preprocessed_image))
 
 if __name__=="__main__":
 	main()

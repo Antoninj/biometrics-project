@@ -1,3 +1,6 @@
+# Author: Antonin Jousson
+# coding: utf-8
+
 import os
 import json
 import regex 
