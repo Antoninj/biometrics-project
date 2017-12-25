@@ -36,7 +36,7 @@ def apply_preprocessing(img):
 
 def main():
 	parser = argparse.ArgumentParser(description="Preprocess fingerprint image")
-	parser.add_argument("image", nargs=1, help = "Input image filepath" , type=str)
+	parser.add_argument("-i","--image", nargs=1, help = "Input image location" , type=str)
 	parser.add_argument("--save", action='store_true', help = "Save result image as img_preprocessed.png")
 	args = parser.parse_args()
 

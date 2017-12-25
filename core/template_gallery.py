@@ -7,6 +7,8 @@ import extract
 
 # external imports
 import os
+import json
+import regex 
 
 from skimage import img_as_uint
 from skimage.io import imread, imshow, imsave
@@ -14,7 +16,7 @@ from skimage.io import imread, imshow, imsave
 import argparse
 
 def load_images(path):
-	images = [imread(img) for img in os.listdir(path), as_grey= True]
+	images = [imread(img, as_grey= True ) for img in os.listdir(path)]
 	return images
 
 def save_images(path, images):
@@ -29,8 +31,12 @@ def extract_minutiae_batch(images):
 	return [extract.extract_minutiae(img) for img in preprocessed_images]
 
 def __main__():
-	data_path = "data/PNG"
-	gallery_path = "data/gallery/"
+	parser = argparse.ArgumentParser(description="Create template gallery from fingerprint images")
+	parser.add_argument("-f","--folder", nargs=1, help = "Input folder location" , type=str)
+	args = parser.parse_args()
+
+	data_path = args.folder
+	gallery_path = "data/template_gallery/"
 
 	print("Loading images... \n")
 	images = load_images(data_path)
