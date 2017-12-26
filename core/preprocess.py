@@ -2,7 +2,6 @@
 # coding: utf-8
 
 # To do : add gabor filtering step to improve preprocessed image quality
-
 from skimage import img_as_uint
 from skimage.io import imread, imsave
 from skimage.exposure import equalize_adapthist, rescale_intensity

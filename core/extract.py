@@ -3,7 +3,6 @@
 
 # To do : improve crossing number algorithm and implement post processing function in order to remove
 # false positives minutiae detected at the image borders
-
 import os
 import numpy as np
 import argparse
@@ -11,7 +10,6 @@ import argparse
 from skimage import img_as_uint, img_as_bool, img_as_ubyte, img_as_float, img_as_int
 from skimage.io import imread, imsave
 from skimage.util import invert
-
 
 grid = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 

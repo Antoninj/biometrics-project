@@ -1,19 +1,16 @@
 # Author: Antonin Jousson
 # coding: utf-8
 
-#internal imports
-import preprocess
-import extract
+# package level imports
+from .core import preprocess, extract
+from .utils.parser import parse_data
 
-# external imports
+# other imports
 import os
 import json
-import regex 
 
 from skimage import img_as_uint
 from skimage.io import imread, imsave
-
-import argparse
 
 def load_images(path):
 	images = [imread(img, as_grey= True ) for img in os.listdir(path)]
@@ -31,24 +28,23 @@ def extract_minutiae_batch(images):
 	return [extract.extract_all_minutiae(img) for img in preprocessed_images]
 
 def main():
-	parser = argparse.ArgumentParser(description="Create template gallery from fingerprint images")
-	parser.add_argument("f","folder", nargs=1, help = "Input folder location" , type=str)
-	args = parser.parse_args()
+	template_data_path = "data/template_data/"
+	gallery_path = "data/template_gallery/"
 
-	data_path = args.folder
-	gallery_path = "data/template_data/"
+	if not os.path.exists(template_data_path):
+		parse_data()
 
-	print("Loading images... \n")
-	images = load_images(data_path)
+	print("Loading template images...")
+	images = load_images(template_data_path)
 
-	print("Preprocessing images...\n")
+	print("Preprocessing template images...")
 	preprocessed_images = preprocess_batch_images(images)
 
-	print("Extracting features... \n")
+	print("Extracting features from preprocessed template images...")
 	extracted_features = extract_minutiae_batch(preprocessed_images)
 
 	save_images(gallery_path, extracted_features)
-	print("Template gallery created !")
+	print("Template features gallery successfully created !")
 
 if __name__=="__main__":
 	main()
