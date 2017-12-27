@@ -16,7 +16,6 @@ def apply_thresh(img,threshold):
 	return img > threshold
 
 def apply_preprocessing(img):
-
 	# Intensity scaling 
 	img_intensity_scale = rescale_intensity(img)
 

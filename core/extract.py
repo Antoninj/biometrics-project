@@ -39,7 +39,6 @@ def extract_all_minutiae(img):
 
 # Compute the crossing number value for a given pixel at position (i,j)
 def compute_crossing_number(img,i,j):
-
 	# If the current pixel is part of the skeleton image
 	if int(img[i][j]) == 0:
 		values = [int(img[i + k][j + l]) for k, l in grid]
@@ -55,12 +54,9 @@ def main():
 	#parser.add_argument("-d","--dest", action='store_true', help = "Saved image destination folder", default = cwd())
 
 	args = parser.parse_args()
-
 	image = imread(args.filepath[0])
 	image = img_as_float(image)
-
 	features_matrix = invert(extract_all_minutiae(image))
-
 	if args.save:
 		base_image_name = os.path.splitext(args.filepath[0])[0]
 		filename = base_image_name+"_extracted.csv"
