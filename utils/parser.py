@@ -22,10 +22,10 @@ def parse_folder(folder):
 		ext = os.path.splitext(file)[1]
 		filepath = folder+"/"+file
 		if any(indicator in base_image_name for indicator in test_data_indicators):
-			dest_dict = "data/test_data/"+ext[1:]
+			dest_dict = "data/test_data/"+folder
 			shutil.copy(filepath,dest_dict)
 		else:
-			dest_dict = "data/template_data/"+ext[1:]
+			dest_dict = "data/template_data/"+folder
 			shutil.copy(filepath,dest_dict)
 
 def parse_data():
