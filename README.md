@@ -11,6 +11,7 @@ More precisely, 4 main preprocessing techniques will be applied in order to enha
 
 - Intensity scaling + Contrast Limited Adaptive Histogram Equalization 
 - Gauss smoothing
+- (Gabor filter image enhancement) 
 - Binarization using dynamic thresholding
 - Thining 
 

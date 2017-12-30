@@ -1,15 +1,17 @@
 # Author: Antonin Jousson
 # coding: utf-8
 
-# To do : improve crossing number algorithm and implement post processing function in order to remove
+# To do : add minutiae drawing on original image functionality and implement post processing function in order to remove
 # false positives minutiae detected at the image borders
 import os
 import numpy as np
 import argparse
+import json
 
 from skimage import img_as_uint, img_as_bool, img_as_ubyte, img_as_float, img_as_int
-from skimage.io import imread, imsave
+from skimage.io import imread, imsave, imshow
 from skimage.util import invert
+from skimage.draw import ellipse
 
 grid = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 
@@ -22,20 +24,24 @@ def postprocess(features, threshold):
 
 	return features
 
-def locate_all_minutiae(img):
+def locate_minutiae_positions(img):
 
 	pass
 
 # Extract all minutiae from the input image
-def extract_all_minutiae(img):
-	#img = img.astype(np.uint8)
+def extract_minutiae_positions(img):
+	img_copy = img_as_float(img)
 	(x, y) = img.shape
-	features_matrix = np.zeros([x,y])
+	#features_matrix = np.zeros([x,y])
+	positions = {"bifurcation":[],"ending":[]}
+
 	for i in range(1, x - 1):
 		for j in range(1, y - 1):
-			features_matrix[i][j] = compute_crossing_number(img, i, j)
-	#clean_features_matrix = postprocess(features_matrix,5)
-	return features_matrix
+			#features_matrix[i][j] = compute_crossing_number(img, i, j)
+			minutiae_type = compute_crossing_number(img_copy, i, j)
+			if minutiae_type != "none":
+				positions[minutiae_type].append((i,j))
+	return positions
 
 # Compute the crossing number value for a given pixel at position (i,j)
 def compute_crossing_number(img,i,j):
@@ -43,25 +49,31 @@ def compute_crossing_number(img,i,j):
 	if int(img[i][j]) == 0:
 		values = [int(img[i + k][j + l]) for k, l in grid]
 		crossings = (sum([abs(int(values[k]) - int(values[k + 1])) for k in range(8)]))//2
-		return crossings if crossings == 1 else int(0)
-	else:
-		return int(0)
+		if crossings == 1:
+			return "ending"
+		elif crossings == 3:
+			return "bifurcation"
+	return "none"
 
 def main():
 	parser = argparse.ArgumentParser(description="Extract minutiae features using a preprocessed fingerprint image")
-	parser.add_argument("filepath", nargs=1, help = "Input image location" , type=str)
-	parser.add_argument("-s","--save", action='store_true', help = "Save template as img_extracted.csv")
+	parser.add_argument("filepath", nargs=1, help = "Input image location", type=str)
+	parser.add_argument("-d","--draw", nargs= 1, help = "Superpose minutiae on original image", type = bool, default = False)
+	parser.add_argument("-s","--save", action='store_true', help = "Save template as img_extracted.json")
 	#parser.add_argument("-d","--dest", action='store_true', help = "Saved image destination folder", default = cwd())
 
 	args = parser.parse_args()
 	image = imread(args.filepath[0])
-	image = img_as_float(image)
-	features_matrix = invert(extract_all_minutiae(image))
+	#features_matrix = invert(extract_minutiae_positions(image))
+	minutiae_positions = extract_minutiae_positions(image)
+	#print(minutiae_positions)
+
 	if args.save:
 		base_image_name = os.path.splitext(args.filepath[0])[0]
-		filename = base_image_name+"_extracted.csv"
-		#np.savetxt(filename, features_matrix, delimiter=",")
-		imsave(base_image_name+"_extracted.png", img_as_uint(features_matrix))
+		filename = base_image_name+"_extracted.json"
+		with open(filename, 'w', encoding='utf-8') as outfile:
+			json.dump(minutiae_positions, outfile,  sort_keys = True, indent = 4, ensure_ascii = False)
+		#imsave(base_image_name+"_extracted.png", img_as_uint(features_matrix))
 
 if __name__=="__main__":
 	main()
