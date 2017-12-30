@@ -60,11 +60,9 @@ def main():
 	parser.add_argument("filepath", nargs=1, help = "Input image location", type=str)
 	parser.add_argument("-d","--draw", nargs= 1, help = "Superpose minutiae on original image", type = bool, default = False)
 	parser.add_argument("-s","--save", action='store_true', help = "Save template as img_extracted.json")
-	#parser.add_argument("-d","--dest", action='store_true', help = "Saved image destination folder", default = cwd())
 
 	args = parser.parse_args()
 	image = imread(args.filepath[0])
-	#features_matrix = invert(extract_minutiae_positions(image))
 	minutiae_positions = extract_minutiae_positions(image)
 	#print(minutiae_positions)
 
@@ -73,7 +71,6 @@ def main():
 		filename = base_image_name+"_extracted.json"
 		with open(filename, 'w', encoding='utf-8') as outfile:
 			json.dump(minutiae_positions, outfile,  sort_keys = True, indent = 4, ensure_ascii = False)
-		#imsave(base_image_name+"_extracted.png", img_as_uint(features_matrix))
 
 if __name__=="__main__":
 	main()

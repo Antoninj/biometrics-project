@@ -11,9 +11,10 @@ def check_folders():
 	folders = [folders[i] + "/" +sub_folders[i] for i in range(len(folders))]
 	for folder in folders:
 		if not os.path.exists(folder):
-			print("Creating " + folder + " folder...")
+			#print("Creating " + folder + " folder...")
 			os.makedirs(folder)
-
+	print("Folders ok")
+	
 def parse_folder(folder_full_path, folder_name):
 	test_data_indicators = ["_"+str(i)+"." for i in range(1,5)]
 	for file in os.listdir(folder_full_path):
@@ -32,7 +33,6 @@ def parse_data():
 	raw_data_folder = "data/raw_data"
 	print("Checking folders... ")
 	check_folders()
-	print("Folders ok")
 	print("Parsing data...")
 	for folder_name in os.listdir(raw_data_folder):
 		if folder_name != ".DS_Store":
