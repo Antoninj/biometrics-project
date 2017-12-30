@@ -2,23 +2,25 @@
 # coding: utf-8
 
 # package level imports
-from .parser import parse_data
+from utils.parser import parse_data
 from core import preprocess, extract
 
 # other imports
 import os
 import json
+from skimage.io import imread
 
-from skimage import img_as_uint
-from skimage.io import imread, imsave
+# To do : add tqdm module in order to track progress of the script during gallery creation
 
 def load_images(path):
-	images = [imread(path + "/" + img, as_grey= True) for img in os.listdir(path) if not img.startswith('.')]
-	return images
+	images_data = []
+	images_names = []
+	for img in os.listdir(path):
+		if not img.startswith('.'):
+			images_data.append(imread(path + "/" + img, as_grey= True))
+			images_names.append(os.path.splitext(img)[0])
 
-def get_image_names(path):
-	image_names = [os.path.splitext(img)[0] for img in os.listdir(path)]
-	return image_names
+	return images_data,images_names
 
 def save_templates(path, templates, image_names):
 	for i,feature_template in enumerate(templates):
@@ -33,31 +35,37 @@ def preprocess_batch_images(images):
 def extract_minutiae_batch(preprocessed_images):
 	return [extract.extract_minutiae_positions(img) for img in preprocessed_images]
 
-def build_gallery():
+def build_gallery(split_number):
 	template_data_path = "data/template_data/"
 	gallery_data_path = "data/template_gallery/"
 
 	if not os.path.exists(template_data_path):
-		parse_data()
+		parse_data(split_number)
 
 	for folder in os.listdir(template_data_path):
-		if folder != ".DS_Store":
+		if not folder.startswith('.'):
 			template_folder_path = template_data_path + folder
-			print("Loading template images from {} folder".format(folder))
-			images = load_images(template_folder_path)
 
-			print("Preprocessing template images")
+			print("Loading template images from {} folder".format(folder))
+			images,image_names = load_images(template_folder_path)
+
+			print("Preprocessing template images...")
 			preprocessed_images = preprocess_batch_images(images)
 
 			print("Extracting features from preprocessed template images...")
 			extracted_features = extract_minutiae_batch(preprocessed_images)
 
 			gallery_folder_path = gallery_data_path + folder
-			image_names = get_image_names(template_folder_path)
 			save_templates(gallery_folder_path, extracted_features, image_names)
-	
+
 	print("Features template gallery successfully created !")
 
-if __name__=="__main__":
-	build_gallery()
+if __name__ == "__main__":
+
+	# Load configuration file
+	with open("config/config.json") as cfg:
+		config = json.load(cfg)
+		
+	split = config['split_number']
+	build_gallery(split)
 

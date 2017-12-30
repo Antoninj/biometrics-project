@@ -3,15 +3,17 @@
 
 # To do : add minutiae drawing on original image functionality and implement post processing function in order to remove
 # false positives minutiae detected at the image borders
+
+from skimage import img_as_uint, img_as_bool, img_as_ubyte, img_as_float, img_as_int
+from skimage.io import imread, imsave
+from skimage.util import invert
+from skimage.draw import ellipse
+
 import os
 import numpy as np
 import argparse
 import json
 
-from skimage import img_as_uint, img_as_bool, img_as_ubyte, img_as_float, img_as_int
-from skimage.io import imread, imsave, imshow
-from skimage.util import invert
-from skimage.draw import ellipse
 
 grid = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 
@@ -55,16 +57,15 @@ def compute_crossing_number(img,i,j):
 			return "bifurcation"
 	return "none"
 
-def main():
+if __name__=="__main__":
 	parser = argparse.ArgumentParser(description="Extract minutiae features using a preprocessed fingerprint image")
 	parser.add_argument("filepath", nargs=1, help = "Input image location", type=str)
-	parser.add_argument("-d","--draw", nargs= 1, help = "Superpose minutiae on original image", type = bool, default = False)
 	parser.add_argument("-s","--save", action='store_true', help = "Save template as img_extracted.json")
+	parser.add_argument("-d","--draw", nargs= 1, help = "Superpose minutiae on original image", type = bool, default = False)
 
 	args = parser.parse_args()
 	image = imread(args.filepath[0])
 	minutiae_positions = extract_minutiae_positions(image)
-	#print(minutiae_positions)
 
 	if args.save:
 		base_image_name = os.path.splitext(args.filepath[0])[0]
@@ -72,6 +73,5 @@ def main():
 		with open(filename, 'w', encoding='utf-8') as outfile:
 			json.dump(minutiae_positions, outfile,  sort_keys = True, indent = 4, ensure_ascii = False)
 
-if __name__=="__main__":
-	main()
+
 
