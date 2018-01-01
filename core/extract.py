@@ -73,5 +73,3 @@ if __name__=="__main__":
 		with open(filename, 'w', encoding='utf-8') as outfile:
 			json.dump(minutiae_positions, outfile,  sort_keys = True, indent = 4, ensure_ascii = False)
 
-
-

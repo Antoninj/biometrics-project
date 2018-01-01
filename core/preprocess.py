@@ -31,7 +31,7 @@ def apply_preprocessing(img):
 	img_binarized = apply_thresh(img_smoothed,thresh_local)
 
 	# Thinning
-	img_thinned = invert(thin(img_binarized))
+	img_thinned = invert(thin(invert(img_binarized)))
 
 	return img_thinned
 
