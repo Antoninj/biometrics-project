@@ -6,7 +6,7 @@
 from skimage import img_as_uint
 from skimage.io import imread, imsave
 from skimage.exposure import equalize_adapthist, rescale_intensity
-from skimage.filters import threshold_local, gaussian 
+from skimage.filters import threshold_local, gaussian
 from skimage.morphology import thin
 from skimage.util import invert
 
@@ -17,11 +17,14 @@ def apply_thresh(img,threshold):
 	return img > threshold
 
 def apply_preprocessing(img):
-	# Intensity scaling 
+	# Intensity scaling
 	img_intensity_scale = rescale_intensity(img)
 
+	# Contrast enhancing
+	img_enhanced_contrast = enhance_contrast(img_intensity_scale, disk(5))
+
 	# Adaptive histogram equalizer
-	img_equalized = equalize_adapthist(img_intensity_scale)
+	img_equalized = equalize_adapthist(img_enhanced_contrast)
 
 	# Gaussian smoothing
 	img_smoothed = gaussian(img_equalized)

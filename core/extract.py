@@ -14,6 +14,10 @@ import numpy as np
 import argparse
 import json
 
+import warnings
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
 
 grid = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 
