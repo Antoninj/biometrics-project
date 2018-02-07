@@ -1,42 +1,43 @@
-# Biometrics project description 
+# Biometrics project description
 
-The goal is to develop a fingerprint recognition biometric system and carry out a thorough performance evaluation in verification mode on 3 (to be confirmed) different datasets.
+The goal is to develop a fingerprint recognition biometric system relying on fingerprint spatial characteristics and carry out a thorough performance evaluation in verification mode.
 
-Eventually and if proven robust enough, the system might be integrated as an alternative ticketing solution into the ROMA ATAC public transportation system.
+## Preprocessing
 
-## Preprocessing 
+A few preprocessing techniques will be applied to the fingerprint images using the [skimage](http://scikit-image.org) image processing library. More precisely, the preprocessing workflow consists of the following steps :
 
-A few preprocessing steps will be applied to the fingerprint images using the [skimage](http://scikit-image.org) image processing library.
-More precisely, 4 main preprocessing techniques will be applied in order to enhance the quality of the images :
-
-- Intensity scaling + Contrast Limited Adaptive Histogram Equalization 
+- Intensity scaling
+- Contrast Limited Adaptive Histogram Equalization
+- Contrast enhancement
 - Gauss smoothing
-- (Gabor filter image enhancement) 
 - Binarization using dynamic thresholding
-- Thining 
+- Thining
 
 ## Feature extraction algorithm
 
-The feature extraction algorithm used for our fingerprint recognition system will be based on the crossing number minutiae extraction technique (see [2] for more details)
+The feature extraction algorithm used for our fingerprint recognition system will be based on the very common crossing number technique (see [1] for more details)
 
-The minutiae extraction algorithm source code will likely be implemented by engineering together some of the code available on the following [GitHub repository](https://github.com/rtshadow/biometrics).
+Our source code is similar to the implementation available on the following [GitHub repository](https://github.com/rtshadow/biometrics) with the difference that we will use skimage instead of the PIL library.
 
-## Matching algorithm 
+A postprocessing algorithm is used to remove false positives in order to increase the matching algorithm performances.
 
-We will implement a point matching algorithm using the previously extracted minutiae features.
+## Matching algorithm
+
+The point matching algorithm relies on the fingerprints spatial characteristics and uses relatives distances between a singular core point and the previously extracted minutiae features. More specifically, we will implement the approach described in [2].
 
 ## Performance evaluation
 
-We will assess the perfomance of our system in verification mode using the all-against-all strategy in both single and multi template settings.
+We will assess the perfomance of our system in verification mode using a singe template configuration.
 
 ##  Datasets
 
-We will use 3 different datasets that can be found [here](http://www.advancedsourcecode.com/fingerprintdatabase.asp).
+Our dataset can be found [here](http://www.advancedsourcecode.com/fingerprintdatabase.asp).
 
 ## Sources
 
-- [Paper 1](http://biometrics.cse.msu.edu/Publications/Fingerprint/RossJainReisman_HybridFpMatcher_PR03.pdf)
+- [Paper 1][1]
 
 - [Paper 2][2]
 
-[2]:(https://ai2-s2-pdfs.s3.amazonaws.com/b17d/ccc16dc4638ed1a019a6b87a731bd56a069d.pdf)
+[2]:(http://www.iaeng.org/publication/WCE2014/WCE2014_pp466-474.pdf)
+[1]:(https://ai2-s2-pdfs.s3.amazonaws.com/b17d/ccc16dc4638ed1a019a6b87a731bd56a069d.pdf)
