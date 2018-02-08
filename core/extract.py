@@ -102,7 +102,14 @@ if __name__=="__main__":
 	args = parser.parse_args()
 	image = imread(args.filepath[0])
 
-	spatial_features_positions = extract_spatial_features_positions(image, block_size = 16, tolerance = 1)
+	# Load configuration file
+	with open("config/config.json") as cfg:
+		config = json.load(cfg)
+
+	tolerance = config['tolerance']
+	block_size = config['block_size']
+
+	spatial_features_positions = extract_spatial_features_positions(image, block_size , tolerance )
 
 	if args.save:
 		base_image_name = os.path.splitext(args.filepath[0])[0]

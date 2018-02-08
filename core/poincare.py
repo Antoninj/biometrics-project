@@ -1,5 +1,5 @@
 # To do:
-# - Extract only loop singularities positions as core point position
+# -Extract only loop singularities positions as core point position
 
 from PIL import Image
 import utils
@@ -39,7 +39,7 @@ def calculate_singularities(im, angles, tolerance, W):
     for i in range(1, len(angles) - 1):
         for j in range(1, len(angles[i]) - 1):
             singularity = poincare_index_at(i, j, angles, tolerance)
-            if singularity != "none":
+            if singularity == "loop":
                 positions.append((i*W,j*W))
 
     return positions
