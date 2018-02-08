@@ -22,7 +22,7 @@ def check_folder(folder_name):
 			os.makedirs(folder)
 
 def parse_folder(folder_full_path, folder_name, split_number):
-	test_data_indicators = ["_"+str(i)+"." for i in range(1,split_number)]
+	test_data_indicators = ["_"+str(i)+"." for i in range(1,split_number+1)]
 	for file in os.listdir(folder_full_path):
 		filepath = folder_full_path+"/"+file
 		extension = os.path.splitext(file)[1]

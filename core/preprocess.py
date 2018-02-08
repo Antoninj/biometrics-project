@@ -1,19 +1,18 @@
 # Author: Antonin Jousson
 # coding: utf-8
 
-# To do : add gabor filtering step to improve preprocessed image quality
-
 from skimage import img_as_uint
 from skimage.io import imread, imsave
 from skimage.exposure import equalize_adapthist, rescale_intensity
 from skimage.filters import threshold_local, gaussian
-from skimage.morphology import thin
+from skimage.filters.rank import enhance_contrast
+from skimage.morphology import thin, disk
 from skimage.util import invert
 
 import argparse
 import os
 
-def apply_thresh(img,threshold):
+def apply_thresh(img, threshold):
 	return img > threshold
 
 def apply_preprocessing(img):
