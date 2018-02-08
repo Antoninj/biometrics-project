@@ -1,6 +1,7 @@
 {
 	"db":"png",
     "split_number": 7,
-    "block_size":8,
-    "tolerance":1
+    "block_size": 8,
+    "tolerance": 1,
+    "threshold": 0.8
 }

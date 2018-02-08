@@ -1,7 +1,7 @@
 # Author: Antonin Jousson
 # coding: utf-8
 
-# package level imports
+# internal imports
 from utils.parser import parse_data
 from core import preprocess, extract
 

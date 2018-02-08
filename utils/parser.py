@@ -36,9 +36,9 @@ def parse_folder(folder_full_path, folder_name, split_number):
 			if extension != ".txt":
 				shutil.copy(filepath,dest_dict)
 
-def parse_data(split_number=4):
+def parse_data(split_number = 4):
 	raw_data_folder = "data/raw_data"
-	
+
 	print("Checking folders... ")
 	for folder_name in os.listdir(raw_data_folder):
 		if folder_name != ".DS_Store":
@@ -48,15 +48,14 @@ def parse_data(split_number=4):
 	for folder_name in os.listdir(raw_data_folder):
 		if folder_name != ".DS_Store":
 			folder_full_path = raw_data_folder +"/"+folder_name
-			parse_folder(folder_full_path,folder_name,split_number)
+			parse_folder(folder_full_path, folder_name, split_number)
 
 if __name__=="__main__":
 	parser = argparse.ArgumentParser(description="Parse raw data")
 	parser.add_argument("-s","--split", nargs=1, help = "Number of files kept for testing (out of 7) for each person" \
 	, type=int, default = 4 , choices = (1,2,3,4,5,6,7))
-	
+
 	args = parser.parse_args()
 	split_number =  args.split
 
 	parse_data(split_number)
-

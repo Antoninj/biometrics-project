@@ -40,7 +40,7 @@ def apply_preprocessing(img):
 if __name__=="__main__":
 	parser = argparse.ArgumentParser(description="Preprocess fingerprint image")
 	parser.add_argument("filepath", nargs=1, help = "Input image location" , type=str)
-	parser.add_argument("-s","--save", action='store_true', help = "Save result image as img_preprocessed.png")
+	parser.add_argument("-s","--save", action='store_true', help = "Save result image as filename_preprocessed.png")
 
 	args = parser.parse_args()
 	image = imread(args.filepath[0], as_grey= True)
@@ -49,4 +49,3 @@ if __name__=="__main__":
 	if args.save:
 		base_image_name = os.path.splitext(args.filepath[0])[0]
 		imsave(base_image_name+"_preprocessed.png", img_as_uint(preprocessed_image))
-

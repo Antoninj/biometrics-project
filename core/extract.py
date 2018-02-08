@@ -1,16 +1,16 @@
 # Author: Antonin Jousson
 # coding: utf-8
 
-# To do :
-# implement false positives minutiae removal algorithm
-# singular core point extraction using poincare index
+# To do:
+# - Implement false positives minutiae removal algorithm
+
+# internal imports
+import poincare
+import utils
 
 from skimage import img_as_uint, img_as_bool, img_as_ubyte, img_as_float, img_as_int
 from skimage.io import imread, imsave
 from skimage.util import invert
-
-import poincare
-import utils
 
 from PIL import Image
 import os
@@ -70,12 +70,20 @@ def extract_core_point_position(img, block_size, tolerance):
 	angles = utils.smooth_angles(angles)
 
 	singularities_positions = poincare.calculate_singularities(im, angles, tolerance, block_size)
+	core_point_position = compute_core_point_position(singularities_positions)
 
-	return singularities_positions
+	return core_point_position
 
+def compute_core_point_position(positions):
+	x_pos = [l[0] for l in positions]
+	y_pos = [l[1] for l in positions]
+	x_mean = sum(x_pos)/len(x_pos)
+	y_mean = sum(y_pos)/len(y_pos)
+
+	return (x_mean,y_mean)
 
 def combine_spatial_features(minutiae_positions,singular_point_position):
-	minutiae_positions["singular point"] = (singular_point_position)
+	minutiae_positions["core point"] = (singular_point_position)
 
 	return minutiae_positions
 
@@ -88,12 +96,11 @@ def extract_spatial_features_positions(img, block_size, tolerance):
 
 if __name__=="__main__":
 	parser = argparse.ArgumentParser(description="Extract minutiae features and core point using a preprocessed fingerprint image")
-	parser.add_argument("filepath", nargs=1, help = "Input image location", type=str)
-	parser.add_argument("-s","--save", action='store_true', help = "Save template as img_extracted.json")
+	parser.add_argument("filepath", nargs=1, help = "Input image location", type = str)
+	parser.add_argument("-s","--save", action='store_true', help = "Save template as filename_extracted.json")
 
 	args = parser.parse_args()
 	image = imread(args.filepath[0])
-	#minutiae_positions = extract_minutiae_positions(image)
 
 	spatial_features_positions = extract_spatial_features_positions(image, block_size = 16, tolerance = 1)
 
@@ -101,5 +108,5 @@ if __name__=="__main__":
 		base_image_name = os.path.splitext(args.filepath[0])[0]
 		filename = base_image_name+"_extracted.json"
 		with open(filename, 'w') as outfile:
-			json.dump(minutiae_positions, outfile,  sort_keys = True, indent = 4, ensure_ascii = False)
+			json.dump(spatial_features_positions, outfile, sort_keys = True, indent = 4, ensure_ascii = False)
 
