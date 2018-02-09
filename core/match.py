@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # To do:
-# - Improve person identity parsing with regex of filename
+# - Fix degree of closeness scoring function
 
 # internal imports
 import preprocess, extract
@@ -12,6 +12,7 @@ import os
 import json
 import argparse
 import math
+import re
 
 from skimage.io import imread
 from skimage import img_as_uint
@@ -39,7 +40,7 @@ class FingerprintMatcher(object):
 
 	def compute_matching_score(self,template_features, probe_features):
 		closeness = self.compute_degree_of_closeness(template_features, probe_features)
-		score = (1-closeness)**(0.01)
+		score = 1-(closeness)
 		return score
 
 	@staticmethod
@@ -55,23 +56,30 @@ class FingerprintMatcher(object):
 		flatten_template_features = template_features[keys[0]] + template_features[keys[1]]
 		flatten_probe_features = probe_features[keys[0]] + probe_features[keys[1]]
 
-		s = min(len(flatten_template_features),len(flatten_probe_features))
-
+		s = min(len(flatten_template_features), len(flatten_probe_features))
 		flatten_features_zipped = zip(flatten_template_features[0:s],flatten_probe_features[0:s])
-		#print(template_core_position,probe_core_position)
 
 		degree_of_closeness = 0
+		#total = 0
 		for features in flatten_features_zipped:
 			feature_distance_template = self.compute_minutiae_core_distance(features[0],template_core_position)
 			feature_distance_probe = self.compute_minutiae_core_distance(features[1],probe_core_position)
+			#total += feature_distance_probe + feature_distance_template
+			temp = (abs(feature_distance_template-feature_distance_probe))
+			degree_of_closeness += temp
 
-		degree_of_closeness += (abs(feature_distance_template-feature_distance_probe))/(feature_distance_probe)
-
-		return degree_of_closeness
+		total = sum([self.compute_minutiae_core_distance(features,probe_core_position) for features in flatten_probe_features])
+		return degree_of_closeness/total
 
 	@staticmethod
 	def parse_identity(input_file, genuine_identity):
-		return int(input_file[0]) if input_file[1]=="_" else int(input_file[0:2])
+		pattern = re.compile("[0-9]+_")
+		match = pattern.search(input_file)
+		true_identity = int(input_file[match.start():match.end()-1])
+		if genuine_identity:
+			return true_identity
+		else:
+			return true_identity + 1
 
 	def get_template(self,probe_identity):
 		return self.templates[probe_identity]
@@ -82,12 +90,12 @@ class FingerprintMatcher(object):
 
 		# Parse probe identity
 		probe_identity = self.parse_identity(filename, genuine_identity)
-		# Retrieve probe associated template
+
+		# Retrieve probe corresponding template
 		template_features = self.get_template(probe_identity)
 
 		# Peprocess probe image
 		preprocessed_image = preprocess.apply_preprocessing(input_image)
-		#preprocessed_image = img_as_uint(preprocessed_image)
 
 		block_size = self.config["block_size"]
 		tolerance = self.config["tolerance"]
@@ -103,10 +111,11 @@ class FingerprintMatcher(object):
 if __name__=="__main__":
 	parser = argparse.ArgumentParser(description = "Match two fingerprint images")
 	parser.add_argument("filepath", nargs = 1, help = "Input image location", type = str)
+	parser.add_argument("-i","--imposter", help = "Input image is genuine or not", action = "store_false", default = True)
 
 	args = parser.parse_args()
-
+	genuine_identity = args.imposter
 	matcher = FingerprintMatcher()
-	score = matcher.verify_identity(args.filepath[0])
+	score = matcher.verify_identity(args.filepath[0], genuine_identity)
 
 	print(score)

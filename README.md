@@ -27,7 +27,7 @@ The point matching algorithm relies on the fingerprints spatial characteristics 
 
 ## Performance evaluation
 
-We will assess the perfomance of our system in verification mode using a singe template configuration.
+We will assess the perfomance of our system in verification mode using the single template configuration.
 
 ##  Datasets
 

@@ -15,8 +15,6 @@ import warnings
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
-# To do : add tqdm module in order to track progress of the script during gallery creation
-
 def load_images(path):
 	images_data = []
 	images_names = []
