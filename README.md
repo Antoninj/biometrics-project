@@ -15,15 +15,15 @@ A few preprocessing techniques will be applied to the fingerprint images using t
 
 ## Feature extraction algorithm
 
-The feature extraction algorithm used for our fingerprint recognition system will be based on the very common crossing number technique (see [1] for more details)
+The feature extraction algorithm used for our fingerprint recognition system will be based on the very common crossing number technique (see this course slides for more details on how the algorithm works)
 
-Our source code is similar to the implementation available on the following [GitHub repository](https://github.com/rtshadow/biometrics) with the difference that we will use skimage instead of the PIL library.
+Our source code is similar to the implementation available on the following [GitHub] with the difference that we will use skimage instead of the PIL library.
 
-A postprocessing algorithm is used to remove false positives in order to increase the matching algorithm performances.
+A postprocessing algorithm building upon the crossing number technique is used to remove false positives in order to increase the matching algorithm performances.
 
 ## Matching algorithm
 
-The point matching algorithm relies on the fingerprints spatial characteristics and uses relatives distances between a singular core point and the previously extracted minutiae features. More specifically, we will implement the approach described in [2].
+The point matching algorithm relies on the fingerprints spatial characteristics and uses relatives distances between a singular core point and the minutiae features. More specifically, we will implement the approach described in this [paper][1].
 
 ## Performance evaluation
 
@@ -31,13 +31,16 @@ We will assess the perfomance of our system in verification mode using the singl
 
 ##  Datasets
 
-Our dataset can be found [here](http://www.advancedsourcecode.com/fingerprintdatabase.asp).
+Our dataset consits of 128 png fingerprint scans that can be found [here][dataset].
 
 ## Sources
 
 - [Paper 1][1]
 
-- [Paper 2][2]
+- [Dataset][dataset]
 
-[2]:(http://www.iaeng.org/publication/WCE2014/WCE2014_pp466-474.pdf)
-[1]:(https://ai2-s2-pdfs.s3.amazonaws.com/b17d/ccc16dc4638ed1a019a6b87a731bd56a069d.pdf)
+- [GitHub]
+
+[GitHub]:https://github.com/rtshadow/
+[1]:http://www.iaeng.org/publication/WCE2014/WCE2014_pp466-474.pdf
+[dataset]:http://www.advancedsourcecode.com/fingerprintdatabase.asp
