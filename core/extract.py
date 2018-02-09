@@ -79,7 +79,6 @@ def compute_core_point_position(positions):
 	y_pos = [l[1] for l in positions]
 	x_mean = sum(x_pos)/len(x_pos)
 	y_mean = sum(y_pos)/len(y_pos)
-
 	return (x_mean,y_mean)
 
 def combine_spatial_features(minutiae_positions,singular_point_position):
@@ -91,7 +90,6 @@ def extract_spatial_features_positions(img, block_size, tolerance):
 	minutiae_positions = extract_minutiae_positions(img)
 	singular_point_position = extract_core_point_position(img, block_size, tolerance)
 	spatial_features = combine_spatial_features(minutiae_positions, singular_point_position)
-
 	return spatial_features
 
 if __name__=="__main__":
