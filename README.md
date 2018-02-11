@@ -15,7 +15,7 @@ A few preprocessing techniques will be applied to the fingerprint images using t
 
 ## Feature extraction algorithm
 
-The feature extraction algorithm used for our fingerprint recognition system will be based on the very common crossing number technique (see this course slides for more details on how the algorithm works)
+The feature extraction algorithm used for our fingerprint recognition system will be based on the very common crossing number technique (see the course slides for more details on how the algorithm works)
 
 Our source code is similar to the implementation available on the following [GitHub] with the difference that we will use skimage instead of the PIL library.
 

@@ -13,6 +13,7 @@ import json
 import argparse
 import math
 import re
+import random
 
 from skimage.io import imread
 from skimage import img_as_uint
@@ -60,15 +61,13 @@ class FingerprintMatcher(object):
 		flatten_features_zipped = zip(flatten_template_features[0:s],flatten_probe_features[0:s])
 
 		degree_of_closeness = 0
-		#total = 0
+		total = sum([self.compute_minutiae_core_distance(features, probe_core_position) for features in flatten_probe_features])
 		for features in flatten_features_zipped:
 			feature_distance_template = self.compute_minutiae_core_distance(features[0],template_core_position)
 			feature_distance_probe = self.compute_minutiae_core_distance(features[1],probe_core_position)
-			#total += feature_distance_probe + feature_distance_template
 			temp = (abs(feature_distance_template-feature_distance_probe))
 			degree_of_closeness += temp
 
-		total = sum([self.compute_minutiae_core_distance(features,probe_core_position) for features in flatten_probe_features])
 		return degree_of_closeness/total
 
 	@staticmethod
@@ -79,7 +78,9 @@ class FingerprintMatcher(object):
 		if genuine_identity:
 			return true_identity
 		else:
-			return true_identity + 1
+			identities = [i for i in range(1,17)]
+			identities.remove(true_identity)
+			return random.choice(identities)
 
 	def get_template(self,probe_identity):
 		return self.templates[probe_identity]
@@ -115,7 +116,12 @@ if __name__=="__main__":
 
 	args = parser.parse_args()
 	genuine_identity = args.imposter
+
+	print("Creating fingerprint matcher...")
+	print("Loading template gallery...")
 	matcher = FingerprintMatcher()
+
+	print("Matching fingerprints...")
 	score = matcher.verify_identity(args.filepath[0], genuine_identity)
 
-	print(score)
+	print("Similarity score: {}".format(round(score,3)))

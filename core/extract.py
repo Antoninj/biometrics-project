@@ -49,7 +49,7 @@ def extract_minutiae_positions(img):
 # Compute the crossing number value for a given pixel at position (i,j)
 def compute_crossing_number(img,i,j):
 	# If the current pixel is part of the skeleton image
-	if int(img[i][j]) == 0:
+	if int(img[i][j]) == 1:
 		values = [int(img[i + k][j + l]) for k, l in grid]
 		crossings = (sum([abs(int(values[k]) - int(values[k + 1])) for k in range(8)]))//2
 		if crossings == 1:
@@ -107,8 +107,10 @@ if __name__=="__main__":
 	tolerance = config['tolerance']
 	block_size = config['block_size']
 
+	print("Extracting features...")
 	spatial_features_positions = extract_spatial_features_positions(image, block_size , tolerance )
 
+	print("Saving results...")
 	if args.save:
 		base_image_name = os.path.splitext(args.filepath[0])[0]
 		filename = base_image_name+"_extracted.json"

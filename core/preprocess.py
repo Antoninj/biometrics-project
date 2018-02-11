@@ -33,7 +33,7 @@ def apply_preprocessing(img):
 	img_binarized = apply_thresh(img_smoothed,thresh_local)
 
 	# Thinning
-	img_thinned = invert(thin(invert(img_binarized)))
+	img_thinned = thin(invert(img_binarized))
 
 	return img_thinned
 
@@ -44,8 +44,11 @@ if __name__=="__main__":
 
 	args = parser.parse_args()
 	image = imread(args.filepath[0], as_grey= True)
+
+	print("Preprocessing image...")
 	preprocessed_image = apply_preprocessing(image)
 
 	if args.save:
+		print("Saving results...")
 		base_image_name = os.path.splitext(args.filepath[0])[0]
 		imsave(base_image_name+"_preprocessed.png", img_as_uint(preprocessed_image))
