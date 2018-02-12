@@ -1,5 +1,5 @@
 {
-	"db":"png",
+	"db":"bmp",
     "split_number": 7,
     "block_size": 8,
     "tolerance": 1,

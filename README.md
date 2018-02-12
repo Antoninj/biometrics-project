@@ -7,11 +7,11 @@ The goal is to develop a fingerprint recognition biometric system relying on fin
 A few preprocessing techniques will be applied to the fingerprint images using the [skimage](http://scikit-image.org) image processing library. More precisely, the preprocessing workflow consists of the following steps :
 
 - Intensity scaling
-- Contrast Limited Adaptive Histogram Equalization
 - Contrast enhancement
+- Contrast Limited Adaptive Histogram Equalization
 - Gauss smoothing
 - Binarization using dynamic thresholding
-- Thining
+- Thinning
 
 ## Feature extraction algorithm
 
@@ -29,7 +29,7 @@ The point matching algorithm relies on the fingerprints spatial characteristics 
 
 We will assess the perfomance of our system in verification mode using the single template configuration.
 
-##  Datasets
+##  Dataset
 
 Our dataset consits of 128 png fingerprint scans that can be found [here][dataset].
 

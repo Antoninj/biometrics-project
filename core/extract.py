@@ -17,6 +17,7 @@ import os
 import numpy as np
 import argparse
 import json
+from operator import itemgetter
 
 import warnings
 
@@ -26,10 +27,24 @@ with warnings.catch_warnings():
 grid = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 
 # False positives removal algorithm
-def postprocess(features):
-	(x, y) = features.shape
+def postprocess(features, border_percentage_removed = 20):
+	positions_flatten = features["bifurcation"]+features["ending"]
+	min_x,max_x= min(positions_flatten, key=itemgetter(1))[1], max(positions_flatten, key=itemgetter(1))[1]
+	min_y,max_y = min(positions_flatten, key=itemgetter(0))[0], max(positions_flatten, key=itemgetter(0))[0]
 
-	# To do ...
+	x_window = (max_x-min_x)
+	y_window = (max_y-min_y)
+
+	x_thresh = round(border_percentage_removed*x_window/100)
+	y_thresh = round(border_percentage_removed*y_window/100)
+
+	for i in features["bifurcation"][:]:
+	    if  (not(min_x + x_thresh <= i[1] <= max_x - x_thresh)) or (not(min_y + y_thresh <= i[0] <= max_y - y_thresh)):
+	        features["bifurcation"].remove(i)
+
+	for i in features["ending"][:]:
+	    if  not(min_x + x_thresh <= i[1] <= max_x - x_thresh) or not(min_y + y_thresh <= i[0] <= max_y - y_thresh):
+	        features["ending"].remove(i)
 
 	return features
 
@@ -71,7 +86,6 @@ def extract_core_point_position(img, block_size, tolerance):
 
 	singularities_positions = poincare.calculate_singularities(im, angles, tolerance, block_size)
 	core_point_position = compute_core_point_position(singularities_positions)
-
 	return core_point_position
 
 def compute_core_point_position(positions):
@@ -83,11 +97,11 @@ def compute_core_point_position(positions):
 
 def combine_spatial_features(minutiae_positions,singular_point_position):
 	minutiae_positions["core point"] = (singular_point_position)
-
 	return minutiae_positions
 
 def extract_spatial_features_positions(img, block_size, tolerance):
 	minutiae_positions = extract_minutiae_positions(img)
+	#minutiae_positions = postprocess(minutiae_positions)
 	singular_point_position = extract_core_point_position(img, block_size, tolerance)
 	spatial_features = combine_spatial_features(minutiae_positions, singular_point_position)
 	return spatial_features
@@ -110,8 +124,8 @@ if __name__=="__main__":
 	print("Extracting features...")
 	spatial_features_positions = extract_spatial_features_positions(image, block_size , tolerance )
 
-	print("Saving results...")
 	if args.save:
+		print("Saving results...")
 		base_image_name = os.path.splitext(args.filepath[0])[0]
 		filename = base_image_name+"_extracted.json"
 		with open(filename, 'w') as outfile:

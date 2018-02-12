@@ -35,7 +35,7 @@ class FingerprintMatcher(object):
 		path = "data/template_gallery/{}".format(db)
 		templates = {}
 		for file in os.listdir(path):
-			file_identity = self.parse_identity(file,True)
+			file_identity = self.parse_identity(file, True)
 			templates[file_identity] = json.loads(open(path+"/"+file).read())
 		return templates
 
@@ -54,31 +54,46 @@ class FingerprintMatcher(object):
 		template_core_position = template_features["core point"]
 		probe_core_position = probe_features["core point"]
 
-		flatten_template_features = template_features[keys[0]] + template_features[keys[1]]
-		flatten_probe_features = probe_features[keys[0]] + probe_features[keys[1]]
+		#flatten_template_features = template_features[keys[0]] + template_features[keys[1]]
+		#flatten_probe_features = probe_features[keys[0]] + probe_features[keys[1]]
+
+		flatten_template_features = template_features[keys[0]]
+		flatten_probe_features = probe_features[keys[0]]
+
+		#print(template_features[keys[0]],probe_features[keys[0]])
 
 		s = min(len(flatten_template_features), len(flatten_probe_features))
 		flatten_features_zipped = zip(flatten_template_features[0:s],flatten_probe_features[0:s])
 
+		total_probe_distances = sum([self.compute_minutiae_core_distance(features, probe_core_position) for features in flatten_probe_features[0:s]])
+		total_template_distances = sum([self.compute_minutiae_core_distance(features, template_core_position) for features in flatten_template_features[0:s]])
+
+		distances_diff = abs(total_probe_distances-total_template_distances)
+
 		degree_of_closeness = 0
-		total = sum([self.compute_minutiae_core_distance(features, probe_core_position) for features in flatten_probe_features])
+		total_distance = total_probe_distances+total_template_distances
+
 		for features in flatten_features_zipped:
 			feature_distance_template = self.compute_minutiae_core_distance(features[0],template_core_position)
 			feature_distance_probe = self.compute_minutiae_core_distance(features[1],probe_core_position)
-			temp = (abs(feature_distance_template-feature_distance_probe))
+			print(feature_distance_template,feature_distance_probe)
+			temp = (abs(feature_distance_probe-feature_distance_template))/(total_distance)
 			degree_of_closeness += temp
 
-		return degree_of_closeness/total
+		return distances_diff/total_distance
 
-	@staticmethod
-	def parse_identity(input_file, genuine_identity):
+	def parse_identity(self, input_file, genuine_identity):
 		pattern = re.compile("[0-9]+_")
 		match = pattern.search(input_file)
 		true_identity = int(input_file[match.start():match.end()-1])
 		if genuine_identity:
 			return true_identity
 		else:
-			identities = [i for i in range(1,17)]
+			db = self.config["db"]
+			if db == "png":
+				identities = [i for i in range(1,17)]
+			else:
+				identities = [i for i in range(1,22)]
 			identities.remove(true_identity)
 			return random.choice(identities)
 
