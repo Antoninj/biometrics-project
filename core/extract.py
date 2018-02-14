@@ -1,9 +1,6 @@
 # Author: Antonin Jousson
 # coding: utf-8
 
-# To do:
-# - Implement false positives minutiae removal algorithm -> Done but terrible ...
-
 # internal imports
 import poincare
 import utils

@@ -1,9 +1,6 @@
 # Author: Antonin Jousson
 # coding: utf-8
 
-# To do:
-# - Fix degree of closeness scoring function
-
 # internal imports
 import preprocess, extract
 
@@ -57,22 +54,11 @@ class FingerprintMatcher(object):
 		flatten_template_features = template_features[keys[0]] + template_features[keys[1]]
 		flatten_probe_features = probe_features[keys[0]] + probe_features[keys[1]]
 
-		s = min(len(flatten_template_features), len(flatten_probe_features))
-		flatten_features_zipped = zip(flatten_template_features[0:s],flatten_probe_features[0:s])
-
 		total_probe_distances = sum([self.compute_minutiae_core_distance(features, probe_core_position) for features in flatten_probe_features])
 		total_template_distances = sum([self.compute_minutiae_core_distance(features, template_core_position) for features in flatten_template_features])
 
 		distances_diff = abs(total_probe_distances-total_template_distances)
-
-		degree_of_closeness = 0
 		total_distance = (total_probe_distances+total_template_distances)/2
-
-		for features in flatten_features_zipped:
-			feature_distance_template = self.compute_minutiae_core_distance(features[0],template_core_position)
-			feature_distance_probe = self.compute_minutiae_core_distance(features[1],probe_core_position)
-			temp = (abs(feature_distance_probe-feature_distance_template))/(total_distance)
-			degree_of_closeness += temp
 
 		return distances_diff/total_distance
 

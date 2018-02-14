@@ -1,6 +1,3 @@
-# Metody biometryczne
-# Przemyslaw Pastuszka
-
 from PIL import Image, ImageDraw
 import math
 import sobel

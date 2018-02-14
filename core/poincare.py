@@ -1,6 +1,3 @@
-# To do:
-# -Extract only loop singularities positions as core point position
-
 from PIL import Image
 import utils
 import math

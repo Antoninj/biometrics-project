@@ -2,7 +2,6 @@
 # coding: utf-8
 
 from verify import run_simulation, load_config
-#import scipy.optimize
 import matplotlib.pyplot as plt
 
 import pandas as pd
@@ -24,8 +23,6 @@ if __name__=="__main__":
 	config = load_config()
 	db = config["db"]
 
-	#genuine_results = run_simulation(matcher, db, True)
-	#fraud_results = run_simulation(matcher, db, False)
 	genuine_results = pd.read_csv("results/results_{}_genuine.csv".format(db),sep='\t', index_col = 0)
 	fraud_results = pd.read_csv("results/results_{}_fraud.csv".format(db),sep='\t', index_col = 0)
 
@@ -39,10 +36,6 @@ if __name__=="__main__":
 
 	df = pd.DataFrame({"threshold":thresholds,"FNMR":FNMR_rates,"FMR":FMR_rates})
 
-	ax_1 = df.plot(x="threshold",y =["FMR","FNMR"], kind='line', grid = True)
-	fig_1 = ax_1.get_figure()
-	fig_1.savefig('results/performance_{}.png'.format(db))
-
 	poly_1 = np.polyfit(df.threshold, df.FMR, deg = 2)
 	poly_2 = np.polyfit(df.threshold, df.FNMR, deg = 2)
 
@@ -50,8 +43,8 @@ if __name__=="__main__":
 	df["FNMR_fitted"]  = np.polyval(poly_2, df.threshold)
 
 	ax_2 = df.plot(x="threshold",y =["FMR_fitted","FNMR_fitted"], kind='line', grid = True)
-	#plt.scatter(0.635, 35.5, marker='x', s=80, zorder=5, linewidth=1.5, color='black')
+	plt.scatter(df["threshold"], df["FMR"], marker='x', s=10, zorder=1, linewidth=1, color='grey')
+	plt.scatter(df["threshold"], df["FNMR"], marker='x', s=10, zorder=1, linewidth=1, color='green')
 	fig_2 = ax_2.get_figure()
 	fig_2.savefig('results/performance_{}_fitted.png'.format(db))
-
 

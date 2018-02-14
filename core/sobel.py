@@ -1,6 +1,3 @@
-# Metody biometryczne
-# Przemyslaw Pastuszka
-
 from PIL import Image, ImageFilter
 from math import sqrt
 import utils
