@@ -54,8 +54,6 @@ class FingerprintMatcher(object):
 		template_core_position = template_features["core point"]
 		probe_core_position = probe_features["core point"]
 
-		#print(template_core_position,probe_core_position)
-
 		flatten_template_features = template_features[keys[0]] + template_features[keys[1]]
 		flatten_probe_features = probe_features[keys[0]] + probe_features[keys[1]]
 
@@ -66,7 +64,6 @@ class FingerprintMatcher(object):
 		total_template_distances = sum([self.compute_minutiae_core_distance(features, template_core_position) for features in flatten_template_features])
 
 		distances_diff = abs(total_probe_distances-total_template_distances)
-		#print(distances_diff)
 
 		degree_of_closeness = 0
 		total_distance = (total_probe_distances+total_template_distances)/2
@@ -74,7 +71,6 @@ class FingerprintMatcher(object):
 		for features in flatten_features_zipped:
 			feature_distance_template = self.compute_minutiae_core_distance(features[0],template_core_position)
 			feature_distance_probe = self.compute_minutiae_core_distance(features[1],probe_core_position)
-			#print(feature_distance_template,feature_distance_probe)
 			temp = (abs(feature_distance_probe-feature_distance_template))/(total_distance)
 			degree_of_closeness += temp
 
@@ -88,10 +84,12 @@ class FingerprintMatcher(object):
 			return true_identity
 		else:
 			db = self.config["db"]
+
 			if db == "png":
 				identities = [i for i in range(1,17)]
 			else:
 				identities = [i for i in range(1,22)]
+
 			identities.remove(true_identity)
 			return random.Random(500).choice(identities)
 
