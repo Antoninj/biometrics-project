@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # To do:
-# - Implement false positives minutiae removal algorithm
+# - Implement false positives minutiae removal algorithm -> Done but terrible ...
 
 # internal imports
 import poincare
@@ -27,7 +27,7 @@ with warnings.catch_warnings():
 grid = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
 
 # False positives removal algorithm
-def postprocess(features, border_percentage_removed = 20):
+def postprocess(features, border_percentage_removed = 30):
 	positions_flatten = features["bifurcation"]+features["ending"]
 	min_x,max_x= min(positions_flatten, key=itemgetter(1))[1], max(positions_flatten, key=itemgetter(1))[1]
 	min_y,max_y = min(positions_flatten, key=itemgetter(0))[0], max(positions_flatten, key=itemgetter(0))[0]
@@ -89,10 +89,12 @@ def extract_core_point_position(img, block_size, tolerance):
 	return core_point_position
 
 def compute_core_point_position(positions):
-	x_pos = [l[0] for l in positions]
-	y_pos = [l[1] for l in positions]
-	x_mean = sum(x_pos)/len(x_pos)
-	y_mean = sum(y_pos)/len(y_pos)
+	if positions != []:
+		x_pos = [l[0] for l in positions]
+		y_pos = [l[1] for l in positions]
+		x_mean = sum(x_pos)/len(x_pos)
+		y_mean = sum(y_pos)/len(y_pos)
+
 	return (x_mean,y_mean)
 
 def combine_spatial_features(minutiae_positions,singular_point_position):
@@ -101,7 +103,7 @@ def combine_spatial_features(minutiae_positions,singular_point_position):
 
 def extract_spatial_features_positions(img, block_size, tolerance):
 	minutiae_positions = extract_minutiae_positions(img)
-	#minutiae_positions = postprocess(minutiae_positions)
+	minutiae_positions = postprocess(minutiae_positions)
 	singular_point_position = extract_core_point_position(img, block_size, tolerance)
 	spatial_features = combine_spatial_features(minutiae_positions, singular_point_position)
 	return spatial_features

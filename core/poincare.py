@@ -42,4 +42,6 @@ def calculate_singularities(im, angles, tolerance, W):
             if singularity == "loop":
                 positions.append((i*W,j*W))
 
+    if positions == []:
+        positions.append((x/2,y/2))
     return positions

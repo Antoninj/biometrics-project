@@ -17,7 +17,7 @@ def apply_thresh(img, threshold):
 
 def apply_preprocessing(img):
 	# Intensity scaling
-	img_intensity_scale = rescale_intensity(img)
+	img_intensity_scale = rescale_intensity(img, in_range= "dtype")
 
 	# Contrast enhancing
 	img_enhanced_contrast = enhance_contrast(img_intensity_scale, disk(5))
